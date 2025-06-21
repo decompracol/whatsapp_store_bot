@@ -6,8 +6,21 @@ from .whatsapp_utils import enviar_mensaje
 whatsapp_blueprint = Blueprint("whatsapp", __name__)
 contexto = extract_text_from_pdf("data/productos_catalogo.pdf")
 
-@whatsapp_blueprint.route("/webhook", methods=["POST"])
+@whatsapp_blueprint.route("/webhook", methods=["GET", "POST"])
 def whatsapp_webhook():
+    if request.method == "GET":
+        verify_token = "mitoken123"  # Usa el mismo token que pones en Meta
+        mode = request.args.get("hub.mode")
+        token = request.args.get("hub.verify_token")
+        challenge = request.args.get("hub.challenge")
+
+        if mode == "subscribe" and token == verify_token:
+            print("WEBHOOK_VERIFICADO")
+            return challenge, 200
+        else:
+            return "Error de verificación", 403
+
+    # POST: manejo de mensajes
     data = request.get_json()
     try:
         mensaje = data["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
