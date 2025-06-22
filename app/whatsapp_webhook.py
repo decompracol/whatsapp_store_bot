@@ -24,13 +24,18 @@ def whatsapp_webhook():
     data = request.get_json()
     print(data)
     try:
-        mensaje = data["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
-        numero = data["entry"][0]["changes"][0]["value"]["messages"][0]["from"]
+        mensaje_obj = data["entry"][0]["changes"][0]["value"]
+    
+        if "messages" not in mensaje_obj:
+            return jsonify({"status": "no hay mensaje"}), 200
+
+        mensaje = mensaje_obj["messages"][0]["text"]["body"]
+        numero = mensaje_obj["messages"][0]["from"]
 
         respuesta = generate_answer(mensaje, contexto)
         print(respuesta)
         enviar_mensaje(numero, respuesta)
-        print(numero) #Esta líenea la uso para depuración
+        print(numero)
         return jsonify({"status": "success"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 400
