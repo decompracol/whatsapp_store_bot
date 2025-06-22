@@ -22,6 +22,7 @@ def whatsapp_webhook():
 
     # POST: manejo de mensajes
     data = request.get_json()
+    print(data)
     try:
         mensaje = data["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
         numero = data["entry"][0]["changes"][0]["value"]["messages"][0]["from"]
