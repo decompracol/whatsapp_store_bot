@@ -15,5 +15,6 @@ def enviar_mensaje(numero, texto):
         "type": "text",
         "text": {"body": texto}
     }
+    print(numero) #Línea usada para depuración
     response = requests.post(url, headers=headers, json=payload)
     print("Mensaje enviado:", response.status_code, response.text)

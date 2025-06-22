@@ -28,7 +28,7 @@ def whatsapp_webhook():
 
         respuesta = generate_answer(mensaje, contexto)
         enviar_mensaje(numero, respuesta)
-
+        print(numero) #Esta líenea la uso para depuración
         return jsonify({"status": "success"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 400
